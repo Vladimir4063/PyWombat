@@ -11,6 +11,6 @@ def sequences_items(my_dict):
     x = my_dict.items()
     print(x)
 
-print(sequences_items(my_dict))    
+sequences_items(my_dict)    
 
 
