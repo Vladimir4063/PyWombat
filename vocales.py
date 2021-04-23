@@ -17,7 +17,7 @@ oa
 #MinPalabra = Palabra.lower()
 #print(MinPalabra)
 
-palabra = "Eduardo"
+palabra = "Eduardo el maquina"
 
 reduPalabra = palabra.lower()
 
