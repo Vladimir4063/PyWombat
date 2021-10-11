@@ -10,7 +10,7 @@ db = pyodbc.connect(
         'DRIVER={SQL Server};SERVER=DESKTOP-4CUGQV7;DATABASE=Productos;UID=sa;PWD=contravlady')
 cursor = db.cursor()
 
-def ViewProducts():
+def Read():
     try:
         query = "SELECT * FROM CrudPyWombat"
         cursor.execute(query)
@@ -28,25 +28,44 @@ def Create():
         query = "INSERT CrudPyWombat(Nombre, Precio) VALUES(?,?)"
         cursor.execute(query, name, price)
         cursor.commit()
-        cursor.close()
+        
 
     except Exception as ex:
         print(ex)
 
-def Remove():
-    
+def Update():
     try:
-        ViewProducts()
+        Read()
+        productUpdate = input("Producto a actualizar: ")
+        newName = input("Nuevo nombre: ")
+        newPrice = int(input("Nuevo precio: "))
+        query = "UPDATE CrudPyWombat SET Nombre = ?, Precio = ? WHERE Nombre = ?"
+        cursor.execute(query, newName, newPrice, productUpdate)
+        cursor.commit()
+        filasAfectadas = abs(cursor.rowcount)
+        
+        if filasAfectadas > 0:
+            Read()
+            print("Producto Actualizado.")
+        else:
+            Read()
+            print("Producto no encontrado.")
+
+    except Exception as ex:
+        print(ex)
+
+def Delete():
+    try:
+        Read()
         producDelete = input("Producto a eliminar: ")
         query = "DELETE FROM CrudPyWombat WHERE Nombre = ?"
         cursor.execute(query, producDelete)
         cursor.commit()
-        filasAfectadas = cursor.fetchone()
-        #filasAfectadas = abs(cursor.rowcount)
+        filasAfectadas = abs(cursor.rowcount)
 
         if filasAfectadas > 0:
-            print(filasAfectadas)
-            print("Producto eliminado.") 
+            Read()
+            print("## Producto eliminado ##") 
         else:
             print("Producto no encontrado.")
 
@@ -57,21 +76,22 @@ txt = """
 ******************
      C R U D
 
-    1 - Create
-    2 - Remove
+    1 - Read
+    2 - Create  
     3 - Update
     4 - Delete
     5 - Exit
 """
-#Create()
-Remove()
-#ViewProducts()
 
-# opc = 0
-# while(opc != 5):
-#     print(txt)
-#     opc = int(input("Ingrese una opción: "))
-#     if(opc == 1):
-#         Create()
-#     if(opc == 2):
-#         Remove()
+opc = 0
+while(opc != 5):
+    print(txt)
+    opc = int(input("Ingrese una opción: "))
+    if(opc == 1):
+        Read()
+    if(opc == 2):
+        Create()
+    if(opc == 3):
+        Update()
+    if(opc == 4):
+        Delete()
